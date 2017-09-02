@@ -22,7 +22,7 @@ services:
         volumes:
             - "./web:/var/www/html"
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
-            - "./etc/php/fpm.conf:/usr/local/etc/php-fpm.d/www.conf"
+            - "./etc/php/php-fpm-www.conf:/usr/local/etc/php-fpm.d/www.conf"
         networks:
             - mybb2-network
     composer:

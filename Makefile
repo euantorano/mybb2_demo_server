@@ -17,14 +17,14 @@ up: env
 	@git clone https://github.com/mybb/mybb2.git web
 	@docker-compose build
 	@docker-compose up -d
-	@docker run --rm -v $(shell pwd)/web:/app --user $(id -u):$(id -g) composer install --no-interaction
+	@docker run --rm -v $(shell pwd)/web:/app --user $(id -u mybb):$(id -g mybb) composer install --no-interaction
 	@sed -i s/DB_HOST=localhost/DB_HOST=$(MYSQL_HOST)/ ./web/.env
 	@sed -i s/DB_DATABASE=homestead/DB_DATABASE=$(MYSQL_DB)/ ./web/.env
 	@sed -i s/DB_USERNAME=homestead/DB_USERNAME=$(MYSQL_USER)/ ./web/.env
 	@sed -i s/DB_PASSWORD=secret/DB_PASSWORD=$(MYSQL_PASSWORD)/ ./web/.env
-	@docker-compose exec -T php ./web/artisan migrate:install
-	@docker-compose exec -T php /var/www/html/artisan migrate
-	@docker-compose exec -T php /var/www/html/artisan db:seed
+	@docker-compose exec -T php artisan migrate:install
+	@docker-compose exec -T php artisan migrate
+	@docker-compose exec -T php artisan db:seed
 down:
 	@docker-compose down -v
 logs:
