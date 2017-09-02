@@ -4,6 +4,8 @@ This repository contains everything required to easily set up a MyBB 2.0 demo se
 
 It includes a [`cloud-init`](https://cloud-init.io) config file to configure a server that should work with most VPS providers (including [DigitalOcean](https://m.do.co/c/b7464e9e7f12) (referral link)).
 
+The `cloud-init` file and Makefile is written to work with Ubuntu 16.04 (the current LTS release) but shouldn't be too hard to adapt for other Linux based operating systems.
+
 The `cloud-init` script checks out this repository and uses the [`Docker Compose`](https://docs.docker.com/compose/) configuration to create Docker containers to run the required MySQL database, Nginx, PHP and Composer.
 
 ## Server Details
