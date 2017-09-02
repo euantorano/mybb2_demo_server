@@ -1,0 +1,50 @@
+version: '3'
+services:
+    web:
+        image: nginx:latest
+        ports:
+            - "8080:80"
+            - "443:443"
+        restart: always
+        volumes:
+            - "./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+            - "./web:/var/www/html"
+        networks:
+            - mybb2-network
+        depends_on:
+            - php
+            - db
+    php:
+        build:
+            context: ./php_image
+            dockerfile: Dockerfile
+        restart: always
+        volumes:
+            - "./web:/var/www/html"
+        networks:
+            - mybb2-network
+    composer:
+        image: "composer"
+        volumes:
+            - "./web:/app"
+        command: install
+    db:
+        image: mysql
+        container_name: ${MYSQL_HOST}
+        restart: always
+        env_file:
+            - ".env"
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        ports:
+            - "3306:3306"
+        volumes:
+            - "./data/db/mysql:/var/lib/mysql"
+        networks:
+            - mybb2-network
+networks:
+    mybb2-network:
+        driver: bridge

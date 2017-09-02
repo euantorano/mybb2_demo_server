@@ -1,0 +1,37 @@
+#cloud-config
+# vim: syntax=yaml
+groups:
+  - docker
+users:
+  - name: root
+  - name: mybb
+    groups: wheel,docker
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    shell: /bin/bash
+package_update: true
+package_upgrade: true
+packages:
+  - htop
+  - nano
+  - ufw
+  - git
+runcmd:
+  - [ timedatectl, set-timezone, UTC ]
+  - [ timedatectl, set-ntp, true ]
+  - sed -i -e '/^Port/s/^.*$/Port 32732/' etc/ssh/sshd_config
+  - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+  - sed -i -e '/X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
+  - sed -i -e '$UseDNS no' /etc/ssh/sshd_config
+  - sed -i -e '$aAllowUsers mybb' /etc/ssh/sshd_config
+  - systemctl restart sshd
+  - 'curl -sSL https://agent.digitalocean.com/install.sh | sh'
+  - 'curl -sSL https://get.docker.com/ | sh'
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw limit 32732
+  - ufw allow http
+  - ufw allow https
+  - echo "y" | ufw enable
+  - curl -L https://github.com/docker/compose/releases/download/1.16.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+  - runuser -l mybb -c 'git clone https://github.com/euantorano/mybb2_demo_server.git /home/mybb/docker'
+  - runuser -l mybb -c 'cd /home/mybb/docker && make up'
