@@ -25,6 +25,8 @@ up: env
 	@docker-compose exec -T php artisan migrate:install
 	@docker-compose exec -T php artisan migrate
 	@docker-compose exec -T php artisan db:seed
+	## Need to make sure the web directory is owned by the www-data user inside the PHP image (this is a dirty way around it...)
+	@chown -R 33 web
 down:
 	@docker-compose down -v
 logs:
