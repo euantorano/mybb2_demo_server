@@ -28,7 +28,6 @@ services:
         image: "composer"
         volumes:
             - "./web:/app"
-        command: install
     db:
         image: mysql
         container_name: ${MYSQL_HOST}
