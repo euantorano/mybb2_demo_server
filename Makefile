@@ -17,7 +17,7 @@ up: env
 	@git clone https://github.com/mybb/mybb2.git web
 	@docker-compose build
 	@docker-compose up -d
-	@docker run --rm -v $(shell pwd)/web:/app composer install
+	@docker run --rm -v $(shell pwd)/web:/app --user mybb:mybb composer install --no-interaction
 	@sed -i s/DB_HOST=localhost/DB_HOST=$(MYSQL_HOST)/ ./web/.env
 	@sed -i s/DB_DATABASE=homestead/DB_DATABASE=$(MYSQL_DB)/ ./web/.env
 	@sed -i s/DB_USERNAME=homestead/DB_USERNAME=$(MYSQL_USER)/ ./web/.env

@@ -21,6 +21,7 @@ services:
         restart: always
         volumes:
             - "./web:/var/www/html"
+            - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
         networks:
             - mybb2-network
     composer:
