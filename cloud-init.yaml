@@ -15,6 +15,7 @@ packages:
   - nano
   - ufw
   - git
+  - build-essential
 runcmd:
   - [ timedatectl, set-timezone, UTC ]
   - [ timedatectl, set-ntp, true ]
